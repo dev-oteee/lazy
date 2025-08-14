@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Estados e Capitais - Meta Ads Tool</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+      color: #e0e0e0;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 30px 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .header h1 {
+      font-size: 2.5em;
+      font-weight: 700;
+      background: linear-gradient(45deg, #667eea, #764ba2, #f093fb);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      font-size: 1.1em;
+      opacity: 0.8;
+      margin-bottom: 20px;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      min-width: 100px;
+    }
+
+    .stat-number {
+      font-size: 2em;
+      font-weight: bold;
+      color: #667eea;
+    }
+
+    .stat-label {
+      font-size: 0.9em;
+      opacity: 0.7;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    .control-btn {
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .control-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .control-btn:active {
+      transform: translateY(0);
+    }
+
+    .section {
+      margin-bottom: 40px;
+      padding: 25px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.3s ease;
+    }
+
+    .section:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .section h2 {
+      font-size: 1.4em;
+      margin-bottom: 20px;
+      color: #667eea;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .region-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+    }
+
+    .norte {
+      background: linear-gradient(45deg, #4CAF50, #45a049);
+    }
+
+    .nordeste {
+      background: linear-gradient(45deg, #FF9800, #F57C00);
+    }
+
+    .centro-oeste {
+      background: linear-gradient(45deg, #9C27B0, #7B1FA2);
+    }
+
+    .sudeste {
+      background: linear-gradient(45deg, #2196F3, #1976D2);
+    }
+
+    .sul {
+      background: linear-gradient(45deg, #F44336, #D32F2F);
+    }
+
+    .capitais {
+      background: linear-gradient(45deg, #FFD700, #FFA000);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+    }
+
+    .item-btn {
+      padding: 16px 20px;
+      background: rgba(255, 255, 255, 0.06);
+      color: #e0e0e0;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .item-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .item-btn:hover::before {
+      left: 100%;
+    }
+
+    .item-btn:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(102, 126, 234, 0.5);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .item-btn:active {
+      transform: translateY(0);
+    }
+
+    .copied {
+      background: linear-gradient(135deg, #4CAF50, #45a049) !important;
+      color: white !important;
+      border-color: #4CAF50 !important;
+    }
+
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 25px;
+      background: linear-gradient(135deg, #4CAF50, #45a049);
+      color: white;
+      border-radius: 12px;
+      font-weight: 600;
+      transform: translateX(400px);
+      transition: transform 0.3s ease;
+      z-index: 1000;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .notification.show {
+      transform: translateX(0);
+    }
+
+    .search-container {
+      margin-bottom: 30px;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 15px 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      color: #e0e0e0;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .search-input::placeholder {
+      color: rgba(224, 224, 224, 0.5);
+    }
+
+    .copy-all-btn {
+      background: linear-gradient(135deg, #764ba2, #667eea);
+      margin-left: 10px;
+      font-size: 12px;
+      padding: 8px 16px;
+      border-radius: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 2em;
+      }
+
+      .stats {
+        gap: 15px;
+      }
+
+      .grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 10px;
+      }
+
+      .controls {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Estados e Capitais do Brasil</h1>
+      <p>Ferramenta para segmentação de campanhas Meta Ads</p>
+      <div class="stats">
+        <div class="stat-item">
+          <div class="stat-number">27</div>
+          <div class="stat-label">Estados</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">27</div>
+          <div class="stat-label">Capitais</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">5</div>
+          <div class="stat-label">Regiões</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="control-btn" onclick="expandAll()">Expandir Todas</button>
+      <button class="control-btn" onclick="collapseAll()">Recolher Todas</button>
+      <button class="control-btn" onclick="clearCopied()">Limpar Copiados</button>
+     
+
+    </div>
+
+    <div class="search-container">
+      <input type="text" class="search-input" placeholder="Pesquisar estado ou capital..."
+        oninput="filterItems(this.value)">
+    </div>
+
+    <div class="section" id="norte">
+      <h2>
+        <span class="region-icon norte"></span>
+        Região Norte
+        <button class="copy-all-btn" onclick="copyAllFromSection('norte')">Copiar Todos</button>
+      </h2>
+      <div class="grid">
+        <button class="item-btn" onclick="copyText('Acre', this)">Acre</button>
+        <button class="item-btn" onclick="copyText('Amapá', this)">Amapá</button>
+        <button class="item-btn" onclick="copyText('Amazonas', this)">Amazonas</button>
+        <button class="item-btn" onclick="copyText('Pará', this)">Pará</button>
+        <button class="item-btn" onclick="copyText('Rondônia', this)">Rondônia</button>
+        <button class="item-btn" onclick="copyText('Roraima', this)">Roraima</button>
+        <button class="item-btn" onclick="copyText('Tocantins', this)">Tocantins</button>
+      </div>
+    </div>
+
+    <div class="section" id="nordeste">
+      <h2>
+        <span class="region-icon nordeste"></span>
+        Região Nordeste
+        <button class="copy-all-btn" onclick="copyAllFromSection('nordeste')">Copiar Todos</button>
+      </h2>
+      <div class="grid">
+        <button class="item-btn" onclick="copyText('Alagoas', this)">Alagoas</button>
+        <button class="item-btn" onclick="copyText('Bahia', this)">Bahia</button>
+        <button class="item-btn" onclick="copyText('Ceará', this)">Ceará</button>
+        <button class="item-btn" onclick="copyText('Maranhão', this)">Maranhão</button>
+        <button class="item-btn" onclick="copyText('Paraíba', this)">Paraíba</button>
+        <button class="item-btn" onclick="copyText('Pernambuco', this)">Pernambuco</button>
+        <button class="item-btn" onclick="copyText('Piauí', this)">Piauí</button>
+        <button class="item-btn" onclick="copyText('Rio Grande do Norte', this)">Rio Grande do Norte</button>
+        <button class="item-btn" onclick="copyText('Sergipe', this)">Sergipe</button>
+      </div>
+    </div>
+
+    <div class="section" id="centro-oeste">
+      <h2>
+        <span class="region-icon centro-oeste"></span>
+        Região Centro-Oeste
+        <button class="copy-all-btn" onclick="copyAllFromSection('centro-oeste')">Copiar Todos</button>
+      </h2>
+      <div class="grid">
+        <button class="item-btn" onclick="copyText('Distrito Federal', this)">Distrito Federal</button>
+        <button class="item-btn" onclick="copyText('Goiás', this)">Goiás</button>
+        <button class="item-btn" onclick="copyText('Mato Grosso', this)">Mato Grosso</button>
+        <button class="item-btn" onclick="copyText('Mato Grosso do Sul', this)">Mato Grosso do Sul</button>
+      </div>
+    </div>
+
+    <div class="section" id="sudeste">
+      <h2>
+        <span class="region-icon sudeste"></span>
+        Região Sudeste
+        <button class="copy-all-btn" onclick="copyAllFromSection('sudeste')">Copiar Todos</button>
+      </h2>
+      <div class="grid">
+        <button class="item-btn" onclick="copyText('Espírito Santo', this)">Espírito Santo</button>
+        <button class="item-btn" onclick="copyText('Minas Gerais', this)">Minas Gerais</button>
+        <button class="item-btn" onclick="copyText('Rio de Janeiro', this)">Rio de Janeiro</button>
+        <button class="item-btn" onclick="copyText('São Paulo', this)">São Paulo</button>
+      </div>
+    </div>
+
+    <div class="section" id="sul">
+      <h2>
+        <span class="region-icon sul"></span>
+        Região Sul
+        <button class="copy-all-btn" onclick="copyAllFromSection('sul')">Copiar Todos</button>
+      </h2>
+      <div class="grid">
+        <button class="item-btn" onclick="copyText('Paraná', this)">Paraná</button>
+        <button class="item-btn" onclick="copyText('Santa Catarina', this)">Santa Catarina</button>
+        <button class="item-btn" onclick="copyText('Rio Grande do Sul', this)">Rio Grande do Sul</button>
+      </div>
+    </div>
+
+    <div class="section" id="capitais">
+      <h2>
+        <span class="region-icon capitais"></span>
+        Capitais do Brasil
+        <button class="copy-all-btn" onclick="copyAllFromSection('capitais')">Copiar Todos</button>
+      </h2>
+      <div class="grid">
+        <button class="item-btn" onclick="copyText('Rio Branco', this)">Rio Branco</button>
+        <button class="item-btn" onclick="copyText('Maceió', this)">Maceió</button>
+        <button class="item-btn" onclick="copyText('Macapá', this)">Macapá</button>
+        <button class="item-btn" onclick="copyText('Manaus', this)">Manaus</button>
+        <button class="item-btn" onclick="copyText('Salvador', this)">Salvador</button>
+        <button class="item-btn" onclick="copyText('Fortaleza', this)">Fortaleza</button>
+        <button class="item-btn" onclick="copyText('Brasília', this)">Brasília</button>
+        <button class="item-btn" onclick="copyText('Vitória', this)">Vitória</button>
+        <button class="item-btn" onclick="copyText('Goiânia', this)">Goiânia</button>
+        <button class="item-btn" onclick="copyText('São Luís', this)">São Luís</button>
+        <button class="item-btn" onclick="copyText('Cuiabá', this)">Cuiabá</button>
+        <button class="item-btn" onclick="copyText('Campo Grande', this)">Campo Grande</button>
+        <button class="item-btn" onclick="copyText('Belo Horizonte', this)">Belo Horizonte</button>
+        <button class="item-btn" onclick="copyText('Belém', this)">Belém</button>
+        <button class="item-btn" onclick="copyText('João Pessoa', this)">João Pessoa</button>
+        <button class="item-btn" onclick="copyText('Curitiba', this)">Curitiba</button>
+        <button class="item-btn" onclick="copyText('Recife', this)">Recife</button>
+        <button class="item-btn" onclick="copyText('Teresina', this)">Teresina</button>
+        <button class="item-btn" onclick="copyText('Rio de Janeiro', this)">Rio de Janeiro</button>
+        <button class="item-btn" onclick="copyText('Natal', this)">Natal</button>
+        <button class="item-btn" onclick="copyText('Porto Alegre', this)">Porto Alegre</button>
+        <button class="item-btn" onclick="copyText('Porto Velho', this)">Porto Velho</button>
+        <button class="item-btn" onclick="copyText('Boa Vista', this)">Boa Vista</button>
+        <button class="item-btn" onclick="copyText('Florianópolis', this)">Florianópolis</button>
+        <button class="item-btn" onclick="copyText('São Paulo', this)">São Paulo</button>
+        <button class="item-btn" onclick="copyText('Aracaju', this)">Aracaju</button>
+        <button class="item-btn" onclick="copyText('Palmas', this)">Palmas</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="notification" id="notification"></div>
+
+  <script>
+    function copyText(text, button) {
+      navigator.clipboard.writeText(text).then(() => {
+        showNotification(`"${text}" copiado!`);
+        button.classList.add('copied');
+        setTimeout(() => {
+          button.classList.remove('copied');
+        }, 2000);
+      }).catch(err => {
+        console.error('Erro ao copiar:', err);
+        showNotification('Erro ao copiar!', 'error');
+      });
+    }
+
+    function showNotification(message, type = 'success') {
+      const notification = document.getElementById('notification');
+      notification.textContent = message;
+      notification.className = `notification ${type}`;
+      notification.classList.add('show');
+
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 3000);
+    }
+
+    function copyAllFromSection(sectionId) {
+      const section = document.getElementById(sectionId);
+      const buttons = section.querySelectorAll('.item-btn');
+      const items = Array.from(buttons).map(btn => btn.textContent);
+      const text = items.join(', ');
+
+      navigator.clipboard.writeText(text).then(() => {
+        showNotification(`${items.length} itens da região copiados!`);
+        buttons.forEach(btn => {
+          btn.classList.add('copied');
+          setTimeout(() => btn.classList.remove('copied'), 2000);
+        });
+      }).catch(err => {
+        console.error('Erro ao copiar:', err);
+        showNotification('Erro ao copiar!', 'error');
+      });
+    }
+
+    function expandAll() {
+      document.querySelectorAll('.section').forEach(section => {
+        section.style.display = 'block';
+      });
+    }
+
+    function collapseAll() {
+      document.querySelectorAll('.section').forEach(section => {
+        section.style.display = 'none';
+      });
+    }
+
+    function clearCopied() {
+      document.querySelectorAll('.copied').forEach(btn => {
+        btn.classList.remove('copied');
+      });
+      showNotification('Marcações limpos!');
+    }
+
+    function filterItems(searchTerm) {
+      const sections = document.querySelectorAll('.section');
+      const term = searchTerm.toLowerCase();
+
+      sections.forEach(section => {
+        const buttons = section.querySelectorAll('.item-btn');
+        let hasVisibleItems = false;
+
+        buttons.forEach(button => {
+          const text = button.textContent.toLowerCase();
+          if (text.includes(term)) {
+            button.style.display = 'block';
+            hasVisibleItems = true;
+          } else {
+            button.style.display = 'none';
+          }
+        });
+
+        section.style.display = hasVisibleItems || term === '' ? 'block' : 'none';
+      });
+    }
+  </script>
+</body>
+
+</html>
